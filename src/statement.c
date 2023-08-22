@@ -17,17 +17,32 @@
  *
  */
 
-#ifndef __FQL_H_
-#define __FQL_H_
+#include <string.h>
 
-typedef enum {
-	COMMAND_META_SUCCESS,
-	COMMAND_META_UNKNOWN
-} cmd_result_t;
+#include <statement.h>
+#include <input.h>
+#include <fql.h>
 
-typedef enum {
-	PREPARE_SUCCESS,
-	PREPARE_UNKNOWN
-} prep_result_t;
+prep_result_t statement_prepare(inbuf_t *input, statement_t *statement)
+{
+	// @todo: port over hashtable from psh
+	if (strncmp(input->buffer, "insert", 6) == 0) {
+		statement->type = STATEMENT_INSERT;
+		return PREPARE_SUCCESS;
+	} else if (strcmp(input->buffer, "select") == 0) {
+		statement->type = STATEMENT_SELECT;
+		return PREPARE_SUCCESS;
+	}
 
-#endif /* __FQL_H_ */
+	return PREPARE_UNKNOWN;
+}
+
+void statement_exec(statement_t *statement)
+{
+	switch(statement->type) {
+		case STATEMENT_INSERT:
+			break;
+		case STATEMENT_SELECT:
+			break;
+	}
+}

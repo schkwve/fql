@@ -17,17 +17,22 @@
  *
  */
 
-#ifndef __FQL_H_
-#define __FQL_H_
+#ifndef __STATEMENT_H_
+#define __STATEMENT_H_
+
+#include <input.h>
+#include <fql.h>
 
 typedef enum {
-	COMMAND_META_SUCCESS,
-	COMMAND_META_UNKNOWN
-} cmd_result_t;
+	STATEMENT_INSERT,
+	STATEMENT_SELECT
+} statement_type_t;
 
-typedef enum {
-	PREPARE_SUCCESS,
-	PREPARE_UNKNOWN
-} prep_result_t;
+typedef struct {
+	statement_type_t type;
+} statement_t;
 
-#endif /* __FQL_H_ */
+prep_result_t statement_prepare(inbuf_t *input, statement_t *statement);
+void statement_exec(statement_t *statement);
+
+#endif /* __STATEMENT_H_ */

@@ -17,17 +17,12 @@
  *
  */
 
-#ifndef __FQL_H_
-#define __FQL_H_
+#ifndef __COMMAND_H_
+#define __COMMAND_H_
 
-typedef enum {
-	COMMAND_META_SUCCESS,
-	COMMAND_META_UNKNOWN
-} cmd_result_t;
+#include <input.h>
+#include <fql.h>
 
-typedef enum {
-	PREPARE_SUCCESS,
-	PREPARE_UNKNOWN
-} prep_result_t;
+cmd_result_t cmd_meta_exec(inbuf_t *input);
 
-#endif /* __FQL_H_ */
+#endif /* __COMMAND_H_ */

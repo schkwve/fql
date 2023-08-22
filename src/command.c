@@ -17,17 +17,19 @@
  *
  */
 
-#ifndef __FQL_H_
-#define __FQL_H_
+#include <string.h>
+#include <stdlib.h>
 
-typedef enum {
-	COMMAND_META_SUCCESS,
-	COMMAND_META_UNKNOWN
-} cmd_result_t;
+#include <command.h>
+#include <input.h>
+#include <fql.h>
 
-typedef enum {
-	PREPARE_SUCCESS,
-	PREPARE_UNKNOWN
-} prep_result_t;
+cmd_result_t cmd_meta_exec(inbuf_t *input)
+{
+	// @todo: port hashtable from psh
+	if (strcmp(input->buffer, ".exit") == 0) {
+		exit(EXIT_SUCCESS);
+	}
 
-#endif /* __FQL_H_ */
+	return COMMAND_META_UNKNOWN;
+}

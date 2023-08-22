@@ -23,6 +23,8 @@
 
 #include <fql.h>
 #include <input.h>
+#include <command.h>
+#include <statement.h>
 
 int main()
 {
@@ -32,12 +34,25 @@ int main()
 		printf("fql> ");
 		input_read(input_buf);
 
-		if (strcmp(input_buf->buffer, ".exit") == 0) {
-			input_freebuf(input_buf);
-			exit(EXIT_SUCCESS);
-		} else {
-			printf("Unknown command: %s\n", input_buf->buffer);
+		if (input_buf->buffer[0] == '.') {
+			switch (cmd_meta_exec(input_buf)) {
+			case COMMAND_META_SUCCESS:
+				continue;
+			case COMMAND_META_UNKNOWN:
+				printf("Unknown command: %s\n", input_buf->buffer);
+				continue;
+			}
 		}
+
+		statement_t statement;
+		switch (statement_prepare(input_buf, &statement)) {
+			case PREPARE_SUCCESS:
+				break;
+			case PREPARE_UNKNOWN:
+				printf("Unknown keyword at start of %s\n", input_buf->buffer);
+				continue;
+		}
+		statement_exec(&statement);
 	}
 
 	return 0;
