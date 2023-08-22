@@ -17,28 +17,20 @@
  *
  */
 
-#include <stdio.h>
+#ifndef __INPUT_H_
+#define __INPUT_H_
+
 #include <stdlib.h>
-#include <string.h>
 
-#include <fql.h>
-#include <input.h>
+typedef struct {
+	char *buffer;
+	size_t buflen;
+	ssize_t inlen;
+} inbuf_t;
 
-int main()
-{
-	inbuf_t *input_buf = input_newbuf();
+void input_read(inbuf_t *input);
 
-	for (;;) {
-		printf("fql> ");
-		input_read(input_buf);
+inbuf_t *input_newbuf();
+void input_freebuf(inbuf_t *input);
 
-		if (strcmp(input_buf->buffer, ".exit") == 0) {
-			input_freebuf(input_buf);
-			exit(EXIT_SUCCESS);
-		} else {
-			printf("Unknown command: %s\n", input_buf->buffer);
-		}
-	}
-
-	return 0;
-}
+#endif /* __INPUT_H_ */

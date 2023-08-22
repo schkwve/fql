@@ -86,7 +86,7 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
-bin_PROGRAMS = fql$(EXEEXT)
+bin_PROGRAMS = fqlconsole$(EXEEXT)
 subdir = src
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
@@ -98,11 +98,12 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
-am_fql_OBJECTS = fql-fql.$(OBJEXT)
-fql_OBJECTS = $(am_fql_OBJECTS)
-fql_LDADD = $(LDADD)
-fql_LINK = $(CCLD) $(fql_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o \
-	$@
+am_fqlconsole_OBJECTS = fqlconsole-fql.$(OBJEXT) \
+	fqlconsole-input.$(OBJEXT)
+fqlconsole_OBJECTS = $(am_fqlconsole_OBJECTS)
+fqlconsole_LDADD = $(LDADD)
+fqlconsole_LINK = $(CCLD) $(fqlconsole_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
+	$(LDFLAGS) -o $@
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 am__v_P_0 = false
@@ -118,7 +119,8 @@ am__v_at_1 =
 DEFAULT_INCLUDES = -I.@am__isrc@
 depcomp = $(SHELL) $(top_srcdir)/build-aux/depcomp
 am__maybe_remake_depfiles = depfiles
-am__depfiles_remade = ./$(DEPDIR)/fql-fql.Po
+am__depfiles_remade = ./$(DEPDIR)/fqlconsole-fql.Po \
+	./$(DEPDIR)/fqlconsole-input.Po
 am__mv = mv -f
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -136,8 +138,8 @@ AM_V_CCLD = $(am__v_CCLD_@AM_V@)
 am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
 am__v_CCLD_0 = @echo "  CCLD    " $@;
 am__v_CCLD_1 = 
-SOURCES = $(fql_SOURCES)
-DIST_SOURCES = $(fql_SOURCES)
+SOURCES = $(fqlconsole_SOURCES)
+DIST_SOURCES = $(fqlconsole_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -251,8 +253,8 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-fql_SOURCES = fql.c
-fql_CFLAGS = -O2 -Wall -Werror -I${abs_top_srcdir}/include
+fqlconsole_SOURCES = fql.c input.c
+fqlconsole_CFLAGS = -O2 -Wall -Werror -I${abs_top_srcdir}/include
 AUTOMAKE_OPTIONS = subdir-objects
 all: all-am
 
@@ -330,9 +332,9 @@ uninstall-binPROGRAMS:
 clean-binPROGRAMS:
 	-test -z "$(bin_PROGRAMS)" || rm -f $(bin_PROGRAMS)
 
-fql$(EXEEXT): $(fql_OBJECTS) $(fql_DEPENDENCIES) $(EXTRA_fql_DEPENDENCIES) 
-	@rm -f fql$(EXEEXT)
-	$(AM_V_CCLD)$(fql_LINK) $(fql_OBJECTS) $(fql_LDADD) $(LIBS)
+fqlconsole$(EXEEXT): $(fqlconsole_OBJECTS) $(fqlconsole_DEPENDENCIES) $(EXTRA_fqlconsole_DEPENDENCIES) 
+	@rm -f fqlconsole$(EXEEXT)
+	$(AM_V_CCLD)$(fqlconsole_LINK) $(fqlconsole_OBJECTS) $(fqlconsole_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -340,7 +342,8 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/fql-fql.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/fqlconsole-fql.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/fqlconsole-input.Po@am__quote@ # am--include-marker
 
 $(am__depfiles_remade):
 	@$(MKDIR_P) $(@D)
@@ -364,19 +367,33 @@ am--depfiles: $(am__depfiles_remade)
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(COMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
 
-fql-fql.o: fql.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(fql_CFLAGS) $(CFLAGS) -MT fql-fql.o -MD -MP -MF $(DEPDIR)/fql-fql.Tpo -c -o fql-fql.o `test -f 'fql.c' || echo '$(srcdir)/'`fql.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/fql-fql.Tpo $(DEPDIR)/fql-fql.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='fql.c' object='fql-fql.o' libtool=no @AMDEPBACKSLASH@
+fqlconsole-fql.o: fql.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(fqlconsole_CFLAGS) $(CFLAGS) -MT fqlconsole-fql.o -MD -MP -MF $(DEPDIR)/fqlconsole-fql.Tpo -c -o fqlconsole-fql.o `test -f 'fql.c' || echo '$(srcdir)/'`fql.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/fqlconsole-fql.Tpo $(DEPDIR)/fqlconsole-fql.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='fql.c' object='fqlconsole-fql.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(fql_CFLAGS) $(CFLAGS) -c -o fql-fql.o `test -f 'fql.c' || echo '$(srcdir)/'`fql.c
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(fqlconsole_CFLAGS) $(CFLAGS) -c -o fqlconsole-fql.o `test -f 'fql.c' || echo '$(srcdir)/'`fql.c
 
-fql-fql.obj: fql.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(fql_CFLAGS) $(CFLAGS) -MT fql-fql.obj -MD -MP -MF $(DEPDIR)/fql-fql.Tpo -c -o fql-fql.obj `if test -f 'fql.c'; then $(CYGPATH_W) 'fql.c'; else $(CYGPATH_W) '$(srcdir)/fql.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/fql-fql.Tpo $(DEPDIR)/fql-fql.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='fql.c' object='fql-fql.obj' libtool=no @AMDEPBACKSLASH@
+fqlconsole-fql.obj: fql.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(fqlconsole_CFLAGS) $(CFLAGS) -MT fqlconsole-fql.obj -MD -MP -MF $(DEPDIR)/fqlconsole-fql.Tpo -c -o fqlconsole-fql.obj `if test -f 'fql.c'; then $(CYGPATH_W) 'fql.c'; else $(CYGPATH_W) '$(srcdir)/fql.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/fqlconsole-fql.Tpo $(DEPDIR)/fqlconsole-fql.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='fql.c' object='fqlconsole-fql.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(fql_CFLAGS) $(CFLAGS) -c -o fql-fql.obj `if test -f 'fql.c'; then $(CYGPATH_W) 'fql.c'; else $(CYGPATH_W) '$(srcdir)/fql.c'; fi`
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(fqlconsole_CFLAGS) $(CFLAGS) -c -o fqlconsole-fql.obj `if test -f 'fql.c'; then $(CYGPATH_W) 'fql.c'; else $(CYGPATH_W) '$(srcdir)/fql.c'; fi`
+
+fqlconsole-input.o: input.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(fqlconsole_CFLAGS) $(CFLAGS) -MT fqlconsole-input.o -MD -MP -MF $(DEPDIR)/fqlconsole-input.Tpo -c -o fqlconsole-input.o `test -f 'input.c' || echo '$(srcdir)/'`input.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/fqlconsole-input.Tpo $(DEPDIR)/fqlconsole-input.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='input.c' object='fqlconsole-input.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(fqlconsole_CFLAGS) $(CFLAGS) -c -o fqlconsole-input.o `test -f 'input.c' || echo '$(srcdir)/'`input.c
+
+fqlconsole-input.obj: input.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(fqlconsole_CFLAGS) $(CFLAGS) -MT fqlconsole-input.obj -MD -MP -MF $(DEPDIR)/fqlconsole-input.Tpo -c -o fqlconsole-input.obj `if test -f 'input.c'; then $(CYGPATH_W) 'input.c'; else $(CYGPATH_W) '$(srcdir)/input.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/fqlconsole-input.Tpo $(DEPDIR)/fqlconsole-input.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='input.c' object='fqlconsole-input.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(fqlconsole_CFLAGS) $(CFLAGS) -c -o fqlconsole-input.obj `if test -f 'input.c'; then $(CYGPATH_W) 'input.c'; else $(CYGPATH_W) '$(srcdir)/input.c'; fi`
 
 ID: $(am__tagged_files)
 	$(am__define_uniq_tagged_files); mkid -fID $$unique
@@ -504,7 +521,8 @@ clean: clean-am
 clean-am: clean-binPROGRAMS clean-generic mostlyclean-am
 
 distclean: distclean-am
-		-rm -f ./$(DEPDIR)/fql-fql.Po
+		-rm -f ./$(DEPDIR)/fqlconsole-fql.Po
+	-rm -f ./$(DEPDIR)/fqlconsole-input.Po
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-tags
@@ -550,7 +568,8 @@ install-ps-am:
 installcheck-am:
 
 maintainer-clean: maintainer-clean-am
-		-rm -f ./$(DEPDIR)/fql-fql.Po
+		-rm -f ./$(DEPDIR)/fqlconsole-fql.Po
+	-rm -f ./$(DEPDIR)/fqlconsole-input.Po
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 

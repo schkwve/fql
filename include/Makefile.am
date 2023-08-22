@@ -1,1 +1,1 @@
-include_HEADERS = fql.h
+include_HEADERS = fql.h input.h

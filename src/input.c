@@ -21,24 +21,33 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <fql.h>
 #include <input.h>
 
-int main()
+void input_read(inbuf_t *input)
 {
-	inbuf_t *input_buf = input_newbuf();
+	ssize_t bytes = getline(&(input->buffer), &(input->buflen), stdin);
 
-	for (;;) {
-		printf("fql> ");
-		input_read(input_buf);
-
-		if (strcmp(input_buf->buffer, ".exit") == 0) {
-			input_freebuf(input_buf);
-			exit(EXIT_SUCCESS);
-		} else {
-			printf("Unknown command: %s\n", input_buf->buffer);
-		}
+	if (bytes <= 0) {
+		printf("Error reading input\n");
+		exit(EXIT_FAILURE);
 	}
 
-	return 0;
+	input->inlen = bytes - 1;
+	input->buffer[bytes - 1] = 0;
+}
+
+inbuf_t *input_newbuf()
+{
+	inbuf_t *new = (inbuf_t *)malloc(sizeof(inbuf_t));
+	new->buffer = NULL;
+	new->buflen = 0;
+	new->inlen = 0;
+
+	return new;
+}
+
+void input_freebuf(inbuf_t *input)
+{
+	free(input->buffer);
+	free(input);
 }
