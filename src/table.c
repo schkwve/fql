@@ -17,14 +17,27 @@
  *
  */
 
-#ifndef __STATEMENT_H_
-#define __STATEMENT_H_
+#include <string.h>
+#include <stdlib.h>
 
-#include <input.h>
 #include <row.h>
-#include <fql.h>
+#include <table.h>
 
-prep_result_t statement_prepare(inbuf_t *input, statement_t *statement);
-exec_result_t statement_exec(statement_t *statement, table_t *table);
+table_t *table_new()
+{
+	table_t *new = (table_t *)malloc(sizeof(table_t));
+	new->num_rows = 0;
+	for (uint32_t i = 0; i < TABLE_MAX_PAGES; i++) {
+		new->pages[i] = NULL;
+	}
 
-#endif /* __STATEMENT_H_ */
+	return new;
+}
+
+void table_free(table_t *table)
+{
+	for (int i = 0; table->pages[i]; i++) {
+		free(table->pages[i]);
+	}
+	free(table);
+}

@@ -25,10 +25,12 @@
 #include <input.h>
 #include <command.h>
 #include <statement.h>
+#include <table.h>
 
 int main()
 {
 	inbuf_t *input_buf = input_newbuf();
+	table_t *table = table_new();
 
 	for (;;) {
 		printf("fql> ");
@@ -46,13 +48,23 @@ int main()
 
 		statement_t statement;
 		switch (statement_prepare(input_buf, &statement)) {
-			case PREPARE_SUCCESS:
-				break;
-			case PREPARE_UNKNOWN:
-				printf("Unknown keyword at start of %s\n", input_buf->buffer);
-				continue;
+		case PREPARE_SUCCESS:
+			break;
+		case PREPARE_SYNTAX_ERR:
+			printf("Syntax error.\n");
+			continue;
+		case PREPARE_UNKNOWN:
+			printf("Unknown keyword at start of %s\n", input_buf->buffer);
+			continue;
 		}
-		statement_exec(&statement);
+
+		switch (statement_exec(&statement, table)) {
+		case EXECUTE_SUCCESS:
+			break;
+		case EXECUTE_TABLE_FULL:
+			printf("Error: Table full.\n");
+			break;
+		}
 	}
 
 	return 0;

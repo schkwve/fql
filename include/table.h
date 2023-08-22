@@ -17,14 +17,12 @@
  *
  */
 
-#ifndef __STATEMENT_H_
-#define __STATEMENT_H_
+#ifndef __TABLE_H_
+#define __TABLE_H_
 
-#include <input.h>
 #include <row.h>
-#include <fql.h>
 
-prep_result_t statement_prepare(inbuf_t *input, statement_t *statement);
-exec_result_t statement_exec(statement_t *statement, table_t *table);
+table_t *table_new();
+void table_free(table_t *table);
 
-#endif /* __STATEMENT_H_ */
+#endif /* __TABLE_H_ */

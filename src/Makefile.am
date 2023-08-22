@@ -2,7 +2,9 @@ bin_PROGRAMS = fqlconsole
 fqlconsole_SOURCES = fql.c \
 					input.c \
 					command.c \
-					statement.c
+					statement.c \
+					row.c \
+					table.c
 
 fqlconsole_CFLAGS = -O2 -Wall -Werror -I${abs_top_srcdir}/include
 

@@ -18,7 +18,9 @@
  */
 
 #include <string.h>
+#include <stdio.h>
 
+#include <command.h>
 #include <statement.h>
 #include <input.h>
 #include <fql.h>
@@ -28,6 +30,12 @@ prep_result_t statement_prepare(inbuf_t *input, statement_t *statement)
 	// @todo: port over hashtable from psh
 	if (strncmp(input->buffer, "insert", 6) == 0) {
 		statement->type = STATEMENT_INSERT;
+		int args = sscanf(
+			input->buffer, "insert %d %s %s", &(statement->insert_row.id),
+			statement->insert_row.username, statement->insert_row.email);
+		if (args < 3) {
+			return PREPARE_SYNTAX_ERR;
+		}
 		return PREPARE_SUCCESS;
 	} else if (strcmp(input->buffer, "select") == 0) {
 		statement->type = STATEMENT_SELECT;
@@ -37,12 +45,12 @@ prep_result_t statement_prepare(inbuf_t *input, statement_t *statement)
 	return PREPARE_UNKNOWN;
 }
 
-void statement_exec(statement_t *statement)
+exec_result_t statement_exec(statement_t *statement, table_t *table)
 {
-	switch(statement->type) {
-		case STATEMENT_INSERT:
-			break;
-		case STATEMENT_SELECT:
-			break;
+	switch (statement->type) {
+	case STATEMENT_INSERT:
+		return cmd_insert(statement, table);
+	case STATEMENT_SELECT:
+		return cmd_select(statement, table);
 	}
 }

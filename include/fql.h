@@ -20,14 +20,23 @@
 #ifndef __FQL_H_
 #define __FQL_H_
 
-typedef enum {
-	COMMAND_META_SUCCESS,
-	COMMAND_META_UNKNOWN
-} cmd_result_t;
+// s = structure
+// a = attribute
+#define sizeof_attr(s, a) sizeof(((s *)0)->a)
 
 typedef enum {
 	PREPARE_SUCCESS,
-	PREPARE_UNKNOWN
+	PREPARE_UNKNOWN,
+	PREPARE_SYNTAX_ERR
 } prep_result_t;
+
+typedef enum {
+	COMMAND_META_SUCCESS,
+	COMMAND_META_UNKNOWN,
+} cmd_result_t;
+
+typedef enum { EXECUTE_SUCCESS, EXECUTE_TABLE_FULL } exec_result_t;
+
+typedef enum { STATEMENT_INSERT, STATEMENT_SELECT } statement_type_t;
 
 #endif /* __FQL_H_ */

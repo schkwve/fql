@@ -21,7 +21,9 @@
 #include <stdlib.h>
 
 #include <command.h>
+#include <statement.h>
 #include <input.h>
+#include <row.h>
 #include <fql.h>
 
 cmd_result_t cmd_meta_exec(inbuf_t *input)
@@ -32,4 +34,29 @@ cmd_result_t cmd_meta_exec(inbuf_t *input)
 	}
 
 	return COMMAND_META_UNKNOWN;
+}
+
+exec_result_t cmd_insert(statement_t *statement, table_t *table)
+{
+	if (table->num_rows >= TABLE_MAX_ROWS) {
+		return EXECUTE_TABLE_FULL;
+	}
+
+	row_t *insert_row = &(statement->insert_row);
+
+	row_serialize(insert_row, row_slot(table, table->num_rows));
+	table->num_rows++;
+
+	return EXECUTE_SUCCESS;
+}
+
+exec_result_t cmd_select(statement_t *statement, table_t *table)
+{
+	row_t row;
+	for (uint32_t i = 0; i < table->num_rows; i++) {
+		row_deserialize(row_slot(table, i), &row);
+		row_print(&row);
+	}
+
+	return EXECUTE_SUCCESS;
 }
