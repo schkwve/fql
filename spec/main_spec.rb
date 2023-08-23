@@ -18,9 +18,13 @@
 #
 
  describe 'database' do
+	before do
+		`rm -rf test.db`
+	end
+
 	def run_script(commands)
 		raw_output = nil
-		IO.popen("./build/src/fqlconsole", "r+") do |pipe|
+		IO.popen("./build/src/fqlconsole test.db", "r+") do |pipe|
 			commands.each do |command|
 				pipe.puts command
 			end
@@ -97,6 +101,27 @@
 		expect(result).to match_array([
 			"fql> ID must be positive.",
 			"fql> OK.",
+			"fql> ",
+		])
+	end
+
+	it 'keeps data after closing the connection' do
+		result1 = run_script([
+			"insert 1 test foo@bar.com",
+			".exit",
+		])
+		expect(result1).to match_array([
+			"fql> OK.",
+			"fql> ",
+		])
+
+		result2 = run_script([
+			"select",
+			".exit",
+		])
+		expect(result2).to match_array([
+			"fql> (1, test, foo@bar.com)",
+			"OK.",
 			"fql> ",
 		])
 	end

@@ -3,4 +3,5 @@ include_HEADERS = fql.h \
 				command.h \
 				statement.h \
 				row.h \
-				table.h
+				pager.h \
+				db.h

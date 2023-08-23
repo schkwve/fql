@@ -20,6 +20,8 @@
 #ifndef __FQL_H_
 #define __FQL_H_
 
+#include <stdlib.h>
+
 // s = structure
 // a = attribute
 #define sizeof_attr(s, a) sizeof(((s *)0)->a)
@@ -40,5 +42,54 @@ typedef enum {
 typedef enum { EXECUTE_SUCCESS, EXECUTE_TABLE_FULL } exec_result_t;
 
 typedef enum { STATEMENT_INSERT, STATEMENT_SELECT } statement_type_t;
+
+typedef struct {
+	char *buffer;
+	size_t buflen;
+	ssize_t inlen;
+} inbuf_t;
+
+#define COL_USERNAME_SIZE 32
+#define COL_EMAIL_SIZE 255
+
+typedef struct {
+	uint32_t id;
+	char username[COL_USERNAME_SIZE + 1];
+	char email[COL_EMAIL_SIZE + 1];
+} row_t;
+
+/// TEMPORARY
+const static uint32_t PAGE_SIZE = 4096;
+
+#define TABLE_MAX_PAGES 100
+
+const static uint32_t ID_SIZE = sizeof_attr(row_t, id);
+const static uint32_t USERNAME_SIZE = sizeof_attr(row_t, username);
+const static uint32_t EMAIL_SIZE = sizeof_attr(row_t, email);
+const static uint32_t ID_OFFSET = 0;
+const static uint32_t USERNAME_OFFSET = ID_OFFSET + ID_SIZE;
+const static uint32_t EMAIL_OFFSET = USERNAME_OFFSET + USERNAME_SIZE;
+const static uint32_t ROW_SIZE = ID_SIZE + USERNAME_SIZE + EMAIL_SIZE;
+
+const static uint32_t ROWS_PER_PAGE = PAGE_SIZE / ROW_SIZE;
+const static uint32_t TABLE_MAX_ROWS = ROWS_PER_PAGE * TABLE_MAX_PAGES;
+/// TEMPORARY
+
+typedef struct {
+	statement_type_t type;
+	row_t insert_row;
+} statement_t;
+
+typedef struct {
+	int file_desc;
+	uint32_t file_length;
+	void *pages[TABLE_MAX_PAGES];
+} pager_t;
+
+typedef struct {
+	uint32_t num_rows;
+	pager_t *pager;
+	;
+} table_t;
 
 #endif /* __FQL_H_ */

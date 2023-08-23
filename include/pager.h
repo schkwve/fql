@@ -17,27 +17,14 @@
  *
  */
 
-#include <string.h>
-#include <stdlib.h>
+#ifndef __PAGER_H_
+#define __PAGER_H_
 
-#include <row.h>
-#include <table.h>
+#include <fql.h>
 
-table_t *table_new()
-{
-	table_t *new = (table_t *)malloc(sizeof(table_t));
-	new->num_rows = 0;
-	for (uint32_t i = 0; i < TABLE_MAX_PAGES; i++) {
-		new->pages[i] = NULL;
-	}
+pager_t *pager_open(const char *filename);
+void pager_flush(pager_t *pager, uint32_t page_num, uint32_t size);
 
-	return new;
-}
+void *pager_get_page(pager_t *pager, uint32_t page_num);
 
-void table_free(table_t *table)
-{
-	for (int i = 0; table->pages[i]; i++) {
-		free(table->pages[i]);
-	}
-	free(table);
-}
+#endif /* __PAGER_H_ */

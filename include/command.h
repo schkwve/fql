@@ -20,11 +20,9 @@
 #ifndef __COMMAND_H_
 #define __COMMAND_H_
 
-#include <input.h>
-#include <table.h>
 #include <fql.h>
 
-cmd_result_t cmd_meta_exec(inbuf_t *input);
+cmd_result_t cmd_meta_exec(inbuf_t *input, table_t *table);
 
 exec_result_t cmd_insert(statement_t *statement, table_t *table);
 exec_result_t cmd_select(statement_t *statement, table_t *table);

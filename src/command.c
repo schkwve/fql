@@ -20,16 +20,18 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include <db.h>
 #include <command.h>
 #include <statement.h>
 #include <input.h>
 #include <row.h>
 #include <fql.h>
 
-cmd_result_t cmd_meta_exec(inbuf_t *input)
+cmd_result_t cmd_meta_exec(inbuf_t *input, table_t *table)
 {
 	// @todo: port hashtable from psh
 	if (strcmp(input->buffer, ".exit") == 0) {
+		db_close(table);
 		exit(EXIT_SUCCESS);
 	}
 

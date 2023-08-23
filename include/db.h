@@ -17,12 +17,12 @@
  *
  */
 
-#ifndef __TABLE_H_
-#define __TABLE_H_
+#ifndef __DB_H_
+#define __DB_H_
 
 #include <row.h>
 
-table_t *table_new();
-void table_free(table_t *table);
+table_t *db_open(const char *filename);
+void db_close(table_t *table);
 
-#endif /* __TABLE_H_ */
+#endif /* __DB_H_ */

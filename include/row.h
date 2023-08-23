@@ -20,45 +20,7 @@
 #ifndef __ROW_H_
 #define __ROW_H_
 
-#include <stdlib.h>
-
 #include <fql.h>
-
-#define COL_USERNAME_SIZE 32
-#define COL_EMAIL_SIZE 255
-
-typedef struct {
-	uint32_t id;
-	char username[COL_USERNAME_SIZE + 1];
-	char email[COL_EMAIL_SIZE + 1];
-} row_t;
-
-/// TEMPORARY
-const static uint32_t PAGE_SIZE = 4096;
-
-#define TABLE_MAX_PAGES 100
-
-const static uint32_t ID_SIZE = sizeof_attr(row_t, id);
-const static uint32_t USERNAME_SIZE = sizeof_attr(row_t, username);
-const static uint32_t EMAIL_SIZE = sizeof_attr(row_t, email);
-const static uint32_t ID_OFFSET = 0;
-const static uint32_t USERNAME_OFFSET = ID_OFFSET + ID_SIZE;
-const static uint32_t EMAIL_OFFSET = USERNAME_OFFSET + USERNAME_SIZE;
-const static uint32_t ROW_SIZE = ID_SIZE + USERNAME_SIZE + EMAIL_SIZE;
-
-const static uint32_t ROWS_PER_PAGE = PAGE_SIZE / ROW_SIZE;
-const static uint32_t TABLE_MAX_ROWS = ROWS_PER_PAGE * TABLE_MAX_PAGES;
-/// TEMPORARY
-
-typedef struct {
-	statement_type_t type;
-	row_t insert_row;
-} statement_t;
-
-typedef struct {
-	uint32_t num_rows;
-	void *pages[TABLE_MAX_PAGES];
-} table_t;
 
 void *row_slot(table_t *table, uint32_t row_num);
 

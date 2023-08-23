@@ -20,8 +20,6 @@
 #ifndef __STATEMENT_H_
 #define __STATEMENT_H_
 
-#include <input.h>
-#include <row.h>
 #include <fql.h>
 
 prep_result_t statement_prepare(inbuf_t *input, statement_t *statement);

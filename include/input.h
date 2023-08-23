@@ -20,13 +20,7 @@
 #ifndef __INPUT_H_
 #define __INPUT_H_
 
-#include <stdlib.h>
-
-typedef struct {
-	char *buffer;
-	size_t buflen;
-	ssize_t inlen;
-} inbuf_t;
+#include <fql.h>
 
 void input_read(inbuf_t *input);
 

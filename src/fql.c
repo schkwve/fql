@@ -25,19 +25,24 @@
 #include <input.h>
 #include <command.h>
 #include <statement.h>
-#include <table.h>
+#include <db.h>
 
-int main()
+int main(int argc, char *argv[])
 {
+	if (argc < 2) {
+		printf("Please supply a database filename.\n");
+		exit(EXIT_FAILURE);
+	}
+
 	inbuf_t *input_buf = input_newbuf();
-	table_t *table = table_new();
+	table_t *table = db_open(argv[1]);
 
 	for (;;) {
 		printf("fql> ");
 		input_read(input_buf);
 
 		if (input_buf->buffer[0] == '.') {
-			switch (cmd_meta_exec(input_buf)) {
+			switch (cmd_meta_exec(input_buf, table)) {
 			case COMMAND_META_SUCCESS:
 				continue;
 			case COMMAND_META_UNKNOWN:
