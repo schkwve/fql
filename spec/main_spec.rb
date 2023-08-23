@@ -28,7 +28,7 @@
 			raw_output = pipe.gets(nil)
 		end
 		raw_output.split("\n")
-	end
+	  end
 
 	it 'inserts and retrieves a row' do
 		result = run_script([
@@ -36,9 +36,39 @@
 			"select",
 			".exit",])
 		expect(result).to match_array([
-			# Two "fql>"'s for insert and select - I might
-			# look into stripping the prompt someday
-			"fql> fql> (1, test, foo@bar.com)",
-			"fql> ",])
+			"OK.",
+			"fql> ",
+			"fql> (1, test, foo@bar.com)",
+			"fql> OK.",])
+	end
+
+	it 'prints error message when table is full' do
+		script = (1..1401).map do |i|
+			"insert #{i} user#{i} foo#{i}@bar.com"
+		end
+		script << ".exit"
+
+		expected = "fql> Error: Table full."
+
+		result = run_script(script)
+		expect(result[-2]).to eq(expected)
+	end
+
+	it 'allows inserting strings that are the maximum length' do
+		long_uname = "a" * 32
+		long_email = "b" * 255
+
+		script = [
+			"insert 1 #{long_uname} #{long_email}",
+			"select",
+			".exit",
+		]
+		result = run_script(script)
+		expect(result).to match_array([
+			"OK.",
+			"fql> ",
+			"fql> (1, #{long_uname}, #{long_email})",
+			"fql> OK.",
+		])
 	end
 end

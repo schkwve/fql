@@ -60,6 +60,7 @@ int main()
 
 		switch (statement_exec(&statement, table)) {
 		case EXECUTE_SUCCESS:
+			printf("OK.\n");
 			break;
 		case EXECUTE_TABLE_FULL:
 			printf("Error: Table full.\n");
