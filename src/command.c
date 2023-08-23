@@ -20,12 +20,14 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include <btree.h>
 #include <db.h>
 #include <command.h>
 #include <statement.h>
 #include <input.h>
 #include <row.h>
 #include <table.h>
+#include <pager.h>
 #include <fql.h>
 
 cmd_result_t cmd_meta_exec(inbuf_t *input, table_t *table)
@@ -41,15 +43,15 @@ cmd_result_t cmd_meta_exec(inbuf_t *input, table_t *table)
 
 exec_result_t cmd_insert(statement_t *statement, table_t *table)
 {
-	if (table->num_rows >= TABLE_MAX_ROWS) {
+	void *node = pager_get_page(table->pager, table->root_page_num);
+	if ((*leaf_node_num_cells(node) >= LEAF_NODE_MAX_CELLS)) {
 		return EXECUTE_TABLE_FULL;
 	}
 
 	row_t *insert_row = &(statement->insert_row);
 	cursor_t *cursor = table_end(table);
 
-	row_serialize(insert_row, cursor_val(cursor));
-	table->num_rows++;
+	leaf_node_insert(cursor, insert_row->id, insert_row);
 
 	free(cursor);
 

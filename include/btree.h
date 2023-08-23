@@ -17,14 +17,17 @@
  *
  */
 
-#ifndef __PAGER_H_
-#define __PAGER_H_
+#ifndef __BTREE_H_
+#define __BTREE_H_
 
 #include <fql.h>
 
-pager_t *pager_open(const char *filename);
-void pager_flush(pager_t *pager, uint32_t page_num);
+void leaf_node_init(void *node);
 
-void *pager_get_page(pager_t *pager, uint32_t page_num);
+uint32_t *leaf_node_num_cells(void *node);
+void *leaf_node_cell(void *node, uint32_t cell_num);
+uint32_t *leaf_node_key(void *node, uint32_t cell_num);
+uint32_t *leaf_node_val(void *node, uint32_t cell_num);
+void leaf_node_insert(cursor_t *cursor, uint32_t key, row_t *val);
 
-#endif /* __PAGER_H_ */
+#endif /* __BTREE_H_ */

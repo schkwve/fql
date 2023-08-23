@@ -19,6 +19,8 @@
 
 #include <stdlib.h>
 
+#include <btree.h>
+#include <pager.h>
 #include <table.h>
 #include <fql.h>
 
@@ -26,8 +28,12 @@ cursor_t *table_start(table_t *table)
 {
 	cursor_t *new = malloc(sizeof(cursor_t));
 	new->table = table;
-	new->row_num = 0;
-	new->eot = (table->num_rows == 0);
+	new->page_num = table->root_page_num;
+	new->cell_num = 0;
+
+	void *root_node = pager_get_page(table->pager, table->root_page_num);
+	uint32_t num_cells = *leaf_node_num_cells(root_node);
+	new->eot = (num_cells == 0);
 
 	return new;
 }
@@ -36,7 +42,11 @@ cursor_t *table_end(table_t *table)
 {
 	cursor_t *new = malloc(sizeof(cursor_t));
 	new->table = table;
-	new->row_num = table->num_rows;
+	new->page_num = table->root_page_num;
+
+	void *root_node = pager_get_page(table->pager, table->root_page_num);
+	uint32_t num_cells = *leaf_node_num_cells(root_node);
+	new->cell_num = num_cells;
 	new->eot = true;
 
 	return new;

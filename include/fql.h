@@ -45,6 +45,8 @@ typedef enum { EXECUTE_SUCCESS, EXECUTE_TABLE_FULL } exec_result_t;
 
 typedef enum { STATEMENT_INSERT, STATEMENT_SELECT } statement_type_t;
 
+typedef enum { NODE_INTERNAL, NODE_LEAF } node_type_t;
+
 typedef struct {
 	char *buffer;
 	size_t buflen;
@@ -73,8 +75,6 @@ const static uint32_t USERNAME_OFFSET = ID_OFFSET + ID_SIZE;
 const static uint32_t EMAIL_OFFSET = USERNAME_OFFSET + USERNAME_SIZE;
 const static uint32_t ROW_SIZE = ID_SIZE + USERNAME_SIZE + EMAIL_SIZE;
 
-const static uint32_t ROWS_PER_PAGE = PAGE_SIZE / ROW_SIZE;
-const static uint32_t TABLE_MAX_ROWS = ROWS_PER_PAGE * TABLE_MAX_PAGES;
 /// TEMPORARY
 
 typedef struct {
@@ -85,18 +85,46 @@ typedef struct {
 typedef struct {
 	int file_desc;
 	uint32_t file_length;
+	uint32_t num_pages;
 	void *pages[TABLE_MAX_PAGES];
 } pager_t;
 
 typedef struct {
-	uint32_t num_rows;
+	uint32_t root_page_num;
 	pager_t *pager;
 } table_t;
 
 typedef struct {
 	table_t *table;
-	uint32_t row_num;
+	uint32_t page_num;
+	uint32_t cell_num;
 	bool eot; // end of table
 } cursor_t;
+
+const static uint32_t NODE_TYPE_SIZE = sizeof(uint8_t);
+const static uint32_t NODE_TYPE_OFFSET = 0;
+const static uint32_t IS_ROOT_SIZE = sizeof(uint8_t);
+const static uint32_t IS_ROOT_OFFSET = NODE_TYPE_SIZE;
+const static uint32_t PARENT_POINTER_SIZE = sizeof(uint32_t);
+const static uint32_t PARENT_POINTER_OFFSET = IS_ROOT_OFFSET + IS_ROOT_SIZE;
+const static uint8_t COMMON_NODE_HEADER_SIZE =
+	NODE_TYPE_SIZE + IS_ROOT_SIZE + PARENT_POINTER_SIZE;
+
+const static uint32_t LEAF_NODE_NUM_CELLS_SIZE = sizeof(uint32_t);
+const static uint32_t LEAF_NODE_NUM_CELLS_OFFSET = COMMON_NODE_HEADER_SIZE;
+const static uint32_t LEAF_NODE_HEADER_SIZE =
+	COMMON_NODE_HEADER_SIZE + LEAF_NODE_NUM_CELLS_SIZE;
+
+const static uint32_t LEAF_NODE_KEY_SIZE = sizeof(uint32_t);
+const static uint32_t LEAF_NODE_KEY_OFFSET = 0;
+const static uint32_t LEAF_NODE_VALUE_SIZE = ROW_SIZE;
+const static uint32_t LEAF_NODE_VALUE_OFFSET =
+	LEAF_NODE_KEY_OFFSET + LEAF_NODE_KEY_SIZE;
+const static uint32_t LEAF_NODE_CELL_SIZE =
+	LEAF_NODE_KEY_SIZE + LEAF_NODE_VALUE_SIZE;
+const static uint32_t LEAF_NODE_SPACE_FOR_CELLS =
+	PAGE_SIZE - LEAF_NODE_HEADER_SIZE;
+const static uint32_t LEAF_NODE_MAX_CELLS =
+	LEAF_NODE_SPACE_FOR_CELLS / LEAF_NODE_CELL_SIZE;
 
 #endif /* __FQL_H_ */

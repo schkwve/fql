@@ -1,4 +1,5 @@
 include_HEADERS = fql.h \
+				btree.h \
 				input.h \
 				command.h \
 				statement.h \

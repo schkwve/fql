@@ -24,17 +24,22 @@
 #include <unistd.h>
 #include <errno.h>
 
+#include <btree.h>
 #include <db.h>
 #include <pager.h>
 
 table_t *db_open(const char *filename)
 {
 	pager_t *pager = pager_open(filename);
-	uint32_t num_rows = pager->file_length / ROW_SIZE;
 
 	table_t *new = malloc(sizeof(table_t));
 	new->pager = pager;
-	new->num_rows = num_rows;
+	new->root_page_num = 0;
+
+	if (pager->num_pages == 0) {
+		void *root_node = pager_get_page(pager, 0);
+		leaf_node_init(root_node);
+	}
 
 	return new;
 }
@@ -42,27 +47,15 @@ table_t *db_open(const char *filename)
 void db_close(table_t *table)
 {
 	pager_t *pager = table->pager;
-	uint32_t num_full_pages = table->num_rows / ROWS_PER_PAGE;
 
-	for (uint32_t i = 0; i < num_full_pages; i++) {
+	for (uint32_t i = 0; i < pager->num_pages; i++) {
 		if (pager->pages[i] == NULL) {
 			continue;
 		}
 
-		pager_flush(pager, i, PAGE_SIZE);
+		pager_flush(pager, i);
 		free(pager->pages[i]);
 		pager->pages[i] = NULL;
-	}
-
-	// check for partial pages
-	uint32_t num_additional_rows = table->num_rows % ROWS_PER_PAGE;
-	if (num_additional_rows > 0) {
-		uint32_t num_pages = num_full_pages;
-		if (pager->pages[num_pages] != NULL) {
-			pager_flush(pager, num_pages, num_additional_rows * ROW_SIZE);
-			free(pager->pages[num_pages]);
-			pager->pages[num_pages] = NULL;
-		}
 	}
 
 	int result = close(pager->file_desc);

@@ -24,6 +24,7 @@
 #include <errno.h>
 
 #include <pager.h>
+#include <btree.h>
 #include <fql.h>
 
 pager_t *pager_open(const char *filename)
@@ -39,6 +40,12 @@ pager_t *pager_open(const char *filename)
 	pager_t *pager = malloc(sizeof(pager_t));
 	pager->file_desc = fd;
 	pager->file_length = file_length;
+	pager->num_pages = (file_length / PAGE_SIZE);
+
+	if (file_length % PAGE_SIZE != 0) {
+		printf("Error: Database file '%s' is corrupt.\n", filename);
+		exit(EXIT_FAILURE);
+	}
 
 	for (uint32_t i = 0; i < TABLE_MAX_PAGES; i++) {
 		pager->pages[i] = NULL;
@@ -47,7 +54,7 @@ pager_t *pager_open(const char *filename)
 	return pager;
 }
 
-void pager_flush(pager_t *pager, uint32_t page_num, uint32_t size)
+void pager_flush(pager_t *pager, uint32_t page_num)
 {
 	if (pager->pages[page_num] == NULL) {
 		printf("Tried to flush null page\n");
@@ -61,7 +68,7 @@ void pager_flush(pager_t *pager, uint32_t page_num, uint32_t size)
 		exit(EXIT_FAILURE);
 	}
 
-	ssize_t bytes = write(pager->file_desc, pager->pages[page_num], size);
+	ssize_t bytes = write(pager->file_desc, pager->pages[page_num], PAGE_SIZE);
 
 	if (bytes == -1) {
 		perror("Error while writing to database: ");
@@ -96,6 +103,10 @@ void *pager_get_page(pager_t *pager, uint32_t page_num)
 		}
 
 		pager->pages[page_num] = page;
+
+		if (page_num >= pager->num_pages) {
+			pager->num_pages = page_num + 1;
+		}
 	}
 
 	return pager->pages[page_num];

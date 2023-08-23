@@ -21,25 +21,26 @@
 #include <string.h>
 #include <stdio.h>
 
-#include <row.h>
+#include <btree.h>
 #include <pager.h>
+#include <row.h>
 #include <fql.h>
 
 void *cursor_val(cursor_t *cursor)
 {
-	uint32_t row_num = cursor->row_num;
-	uint32_t page_num = row_num / ROWS_PER_PAGE;
+	uint32_t page_num = cursor->page_num;
 	void *page = pager_get_page(cursor->table->pager, page_num);
 
-	uint32_t row_off = row_num % ROWS_PER_PAGE;
-	uint32_t byte_off = row_off * ROW_SIZE;
-	return page + byte_off;
+	return leaf_node_val(page, cursor->cell_num);
 }
 
 void cursor_advance(cursor_t *cursor)
 {
-	cursor->row_num++;
-	if (cursor->row_num >= cursor->table->num_rows) {
+	uint32_t page_num = cursor->page_num;
+	void *node = pager_get_page(cursor->table->pager, page_num);
+
+	cursor->cell_num++;
+	if (cursor->cell_num >= (*leaf_node_num_cells(node))) {
 		cursor->eot = true;
 	}
 }

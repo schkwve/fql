@@ -99,10 +99,10 @@ CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
 am_fqlconsole_OBJECTS = fqlconsole-fql.$(OBJEXT) \
-	fqlconsole-input.$(OBJEXT) fqlconsole-command.$(OBJEXT) \
-	fqlconsole-statement.$(OBJEXT) fqlconsole-row.$(OBJEXT) \
-	fqlconsole-pager.$(OBJEXT) fqlconsole-table.$(OBJEXT) \
-	fqlconsole-db.$(OBJEXT)
+	fqlconsole-btree.$(OBJEXT) fqlconsole-input.$(OBJEXT) \
+	fqlconsole-command.$(OBJEXT) fqlconsole-statement.$(OBJEXT) \
+	fqlconsole-row.$(OBJEXT) fqlconsole-pager.$(OBJEXT) \
+	fqlconsole-table.$(OBJEXT) fqlconsole-db.$(OBJEXT)
 fqlconsole_OBJECTS = $(am_fqlconsole_OBJECTS)
 fqlconsole_LDADD = $(LDADD)
 fqlconsole_LINK = $(CCLD) $(fqlconsole_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
@@ -122,9 +122,9 @@ am__v_at_1 =
 DEFAULT_INCLUDES = -I.@am__isrc@
 depcomp = $(SHELL) $(top_srcdir)/build-aux/depcomp
 am__maybe_remake_depfiles = depfiles
-am__depfiles_remade = ./$(DEPDIR)/fqlconsole-command.Po \
-	./$(DEPDIR)/fqlconsole-db.Po ./$(DEPDIR)/fqlconsole-fql.Po \
-	./$(DEPDIR)/fqlconsole-input.Po \
+am__depfiles_remade = ./$(DEPDIR)/fqlconsole-btree.Po \
+	./$(DEPDIR)/fqlconsole-command.Po ./$(DEPDIR)/fqlconsole-db.Po \
+	./$(DEPDIR)/fqlconsole-fql.Po ./$(DEPDIR)/fqlconsole-input.Po \
 	./$(DEPDIR)/fqlconsole-pager.Po ./$(DEPDIR)/fqlconsole-row.Po \
 	./$(DEPDIR)/fqlconsole-statement.Po \
 	./$(DEPDIR)/fqlconsole-table.Po
@@ -261,6 +261,7 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 fqlconsole_SOURCES = fql.c \
+					btree.c \
 					input.c \
 					command.c \
 					statement.c \
@@ -357,6 +358,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/fqlconsole-btree.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/fqlconsole-command.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/fqlconsole-db.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/fqlconsole-fql.Po@am__quote@ # am--include-marker
@@ -401,6 +403,20 @@ fqlconsole-fql.obj: fql.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='fql.c' object='fqlconsole-fql.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(fqlconsole_CFLAGS) $(CFLAGS) -c -o fqlconsole-fql.obj `if test -f 'fql.c'; then $(CYGPATH_W) 'fql.c'; else $(CYGPATH_W) '$(srcdir)/fql.c'; fi`
+
+fqlconsole-btree.o: btree.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(fqlconsole_CFLAGS) $(CFLAGS) -MT fqlconsole-btree.o -MD -MP -MF $(DEPDIR)/fqlconsole-btree.Tpo -c -o fqlconsole-btree.o `test -f 'btree.c' || echo '$(srcdir)/'`btree.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/fqlconsole-btree.Tpo $(DEPDIR)/fqlconsole-btree.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='btree.c' object='fqlconsole-btree.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(fqlconsole_CFLAGS) $(CFLAGS) -c -o fqlconsole-btree.o `test -f 'btree.c' || echo '$(srcdir)/'`btree.c
+
+fqlconsole-btree.obj: btree.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(fqlconsole_CFLAGS) $(CFLAGS) -MT fqlconsole-btree.obj -MD -MP -MF $(DEPDIR)/fqlconsole-btree.Tpo -c -o fqlconsole-btree.obj `if test -f 'btree.c'; then $(CYGPATH_W) 'btree.c'; else $(CYGPATH_W) '$(srcdir)/btree.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/fqlconsole-btree.Tpo $(DEPDIR)/fqlconsole-btree.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='btree.c' object='fqlconsole-btree.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(fqlconsole_CFLAGS) $(CFLAGS) -c -o fqlconsole-btree.obj `if test -f 'btree.c'; then $(CYGPATH_W) 'btree.c'; else $(CYGPATH_W) '$(srcdir)/btree.c'; fi`
 
 fqlconsole-input.o: input.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(fqlconsole_CFLAGS) $(CFLAGS) -MT fqlconsole-input.o -MD -MP -MF $(DEPDIR)/fqlconsole-input.Tpo -c -o fqlconsole-input.o `test -f 'input.c' || echo '$(srcdir)/'`input.c
@@ -626,7 +642,8 @@ clean: clean-am
 clean-am: clean-binPROGRAMS clean-generic mostlyclean-am
 
 distclean: distclean-am
-		-rm -f ./$(DEPDIR)/fqlconsole-command.Po
+		-rm -f ./$(DEPDIR)/fqlconsole-btree.Po
+	-rm -f ./$(DEPDIR)/fqlconsole-command.Po
 	-rm -f ./$(DEPDIR)/fqlconsole-db.Po
 	-rm -f ./$(DEPDIR)/fqlconsole-fql.Po
 	-rm -f ./$(DEPDIR)/fqlconsole-input.Po
@@ -679,7 +696,8 @@ install-ps-am:
 installcheck-am:
 
 maintainer-clean: maintainer-clean-am
-		-rm -f ./$(DEPDIR)/fqlconsole-command.Po
+		-rm -f ./$(DEPDIR)/fqlconsole-btree.Po
+	-rm -f ./$(DEPDIR)/fqlconsole-command.Po
 	-rm -f ./$(DEPDIR)/fqlconsole-db.Po
 	-rm -f ./$(DEPDIR)/fqlconsole-fql.Po
 	-rm -f ./$(DEPDIR)/fqlconsole-input.Po

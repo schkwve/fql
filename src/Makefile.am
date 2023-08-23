@@ -1,5 +1,6 @@
 bin_PROGRAMS = fqlconsole
 fqlconsole_SOURCES = fql.c \
+					btree.c \
 					input.c \
 					command.c \
 					statement.c \
