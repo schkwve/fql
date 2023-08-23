@@ -16,6 +16,22 @@ The resulting binary should be located at `build/src/fql`.
 
 To install FQL, run `sudo make install`.
 
+## Testing
+
+FQL relies on its own test suite rather than on the one provided by GNU Autotools.
+
+To run the automated test suite:
+
+ - Compile FQL as per the [instructions above](#Building).
+ - Make sure you have `bundle` installed.
+ - Make sure you have the `rspec` Gem installed.
+ - Execute the following command in the root directory of this repo:
+```bash
+bundle exec rspec
+```
+
+Tests are written in Ruby, and are located in the `spec` directory.
+
 ## Contributing
 
 Pull requests are welcome. For major changes, please open an issue first
