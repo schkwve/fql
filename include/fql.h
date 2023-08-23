@@ -21,6 +21,8 @@
 #define __FQL_H_
 
 #include <stdlib.h>
+#include <sys/types.h>
+#include <stdbool.h>
 
 // s = structure
 // a = attribute
@@ -89,7 +91,12 @@ typedef struct {
 typedef struct {
 	uint32_t num_rows;
 	pager_t *pager;
-	;
 } table_t;
+
+typedef struct {
+	table_t *table;
+	uint32_t row_num;
+	bool eot; // end of table
+} cursor_t;
 
 #endif /* __FQL_H_ */

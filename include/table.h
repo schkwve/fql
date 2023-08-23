@@ -17,17 +17,12 @@
  *
  */
 
-#ifndef __ROW_H_
-#define __ROW_H_
+#ifndef __TABLE_H_
+#define __TABLE_H_
 
 #include <fql.h>
 
-void *cursor_val(cursor_t *cursor);
-void cursor_advance(cursor_t *cursor);
+cursor_t *table_start(table_t *table);
+cursor_t *table_end(table_t *table);
 
-void row_print(row_t *row);
-
-void row_serialize(row_t *src, void *dest);
-void row_deserialize(void *src, row_t *dest);
-
-#endif /* __ROW_H_ */
+#endif /* __TABLE_H_ */

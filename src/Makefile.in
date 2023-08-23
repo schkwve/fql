@@ -101,7 +101,8 @@ PROGRAMS = $(bin_PROGRAMS)
 am_fqlconsole_OBJECTS = fqlconsole-fql.$(OBJEXT) \
 	fqlconsole-input.$(OBJEXT) fqlconsole-command.$(OBJEXT) \
 	fqlconsole-statement.$(OBJEXT) fqlconsole-row.$(OBJEXT) \
-	fqlconsole-pager.$(OBJEXT) fqlconsole-db.$(OBJEXT)
+	fqlconsole-pager.$(OBJEXT) fqlconsole-table.$(OBJEXT) \
+	fqlconsole-db.$(OBJEXT)
 fqlconsole_OBJECTS = $(am_fqlconsole_OBJECTS)
 fqlconsole_LDADD = $(LDADD)
 fqlconsole_LINK = $(CCLD) $(fqlconsole_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
@@ -125,7 +126,8 @@ am__depfiles_remade = ./$(DEPDIR)/fqlconsole-command.Po \
 	./$(DEPDIR)/fqlconsole-db.Po ./$(DEPDIR)/fqlconsole-fql.Po \
 	./$(DEPDIR)/fqlconsole-input.Po \
 	./$(DEPDIR)/fqlconsole-pager.Po ./$(DEPDIR)/fqlconsole-row.Po \
-	./$(DEPDIR)/fqlconsole-statement.Po
+	./$(DEPDIR)/fqlconsole-statement.Po \
+	./$(DEPDIR)/fqlconsole-table.Po
 am__mv = mv -f
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -264,6 +266,7 @@ fqlconsole_SOURCES = fql.c \
 					statement.c \
 					row.c \
 					pager.c \
+					table.c \
 					db.c
 
 fqlconsole_CFLAGS = -O2 -Wall -Werror -I${abs_top_srcdir}/include
@@ -361,6 +364,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/fqlconsole-pager.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/fqlconsole-row.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/fqlconsole-statement.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/fqlconsole-table.Po@am__quote@ # am--include-marker
 
 $(am__depfiles_remade):
 	@$(MKDIR_P) $(@D)
@@ -467,6 +471,20 @@ fqlconsole-pager.obj: pager.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='pager.c' object='fqlconsole-pager.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(fqlconsole_CFLAGS) $(CFLAGS) -c -o fqlconsole-pager.obj `if test -f 'pager.c'; then $(CYGPATH_W) 'pager.c'; else $(CYGPATH_W) '$(srcdir)/pager.c'; fi`
+
+fqlconsole-table.o: table.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(fqlconsole_CFLAGS) $(CFLAGS) -MT fqlconsole-table.o -MD -MP -MF $(DEPDIR)/fqlconsole-table.Tpo -c -o fqlconsole-table.o `test -f 'table.c' || echo '$(srcdir)/'`table.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/fqlconsole-table.Tpo $(DEPDIR)/fqlconsole-table.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='table.c' object='fqlconsole-table.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(fqlconsole_CFLAGS) $(CFLAGS) -c -o fqlconsole-table.o `test -f 'table.c' || echo '$(srcdir)/'`table.c
+
+fqlconsole-table.obj: table.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(fqlconsole_CFLAGS) $(CFLAGS) -MT fqlconsole-table.obj -MD -MP -MF $(DEPDIR)/fqlconsole-table.Tpo -c -o fqlconsole-table.obj `if test -f 'table.c'; then $(CYGPATH_W) 'table.c'; else $(CYGPATH_W) '$(srcdir)/table.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/fqlconsole-table.Tpo $(DEPDIR)/fqlconsole-table.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='table.c' object='fqlconsole-table.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(fqlconsole_CFLAGS) $(CFLAGS) -c -o fqlconsole-table.obj `if test -f 'table.c'; then $(CYGPATH_W) 'table.c'; else $(CYGPATH_W) '$(srcdir)/table.c'; fi`
 
 fqlconsole-db.o: db.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(fqlconsole_CFLAGS) $(CFLAGS) -MT fqlconsole-db.o -MD -MP -MF $(DEPDIR)/fqlconsole-db.Tpo -c -o fqlconsole-db.o `test -f 'db.c' || echo '$(srcdir)/'`db.c
@@ -615,6 +633,7 @@ distclean: distclean-am
 	-rm -f ./$(DEPDIR)/fqlconsole-pager.Po
 	-rm -f ./$(DEPDIR)/fqlconsole-row.Po
 	-rm -f ./$(DEPDIR)/fqlconsole-statement.Po
+	-rm -f ./$(DEPDIR)/fqlconsole-table.Po
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-tags
@@ -667,6 +686,7 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/fqlconsole-pager.Po
 	-rm -f ./$(DEPDIR)/fqlconsole-row.Po
 	-rm -f ./$(DEPDIR)/fqlconsole-statement.Po
+	-rm -f ./$(DEPDIR)/fqlconsole-table.Po
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 

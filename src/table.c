@@ -17,17 +17,27 @@
  *
  */
 
-#ifndef __ROW_H_
-#define __ROW_H_
+#include <stdlib.h>
 
+#include <table.h>
 #include <fql.h>
 
-void *cursor_val(cursor_t *cursor);
-void cursor_advance(cursor_t *cursor);
+cursor_t *table_start(table_t *table)
+{
+	cursor_t *new = malloc(sizeof(cursor_t));
+	new->table = table;
+	new->row_num = 0;
+	new->eot = (table->num_rows == 0);
 
-void row_print(row_t *row);
+	return new;
+}
 
-void row_serialize(row_t *src, void *dest);
-void row_deserialize(void *src, row_t *dest);
+cursor_t *table_end(table_t *table)
+{
+	cursor_t *new = malloc(sizeof(cursor_t));
+	new->table = table;
+	new->row_num = table->num_rows;
+	new->eot = true;
 
-#endif /* __ROW_H_ */
+	return new;
+}

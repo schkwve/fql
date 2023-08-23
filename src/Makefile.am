@@ -5,6 +5,7 @@ fqlconsole_SOURCES = fql.c \
 					statement.c \
 					row.c \
 					pager.c \
+					table.c \
 					db.c
 
 fqlconsole_CFLAGS = -O2 -Wall -Werror -I${abs_top_srcdir}/include

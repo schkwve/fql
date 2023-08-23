@@ -25,14 +25,23 @@
 #include <pager.h>
 #include <fql.h>
 
-void *row_slot(table_t *table, uint32_t row_num)
+void *cursor_val(cursor_t *cursor)
 {
+	uint32_t row_num = cursor->row_num;
 	uint32_t page_num = row_num / ROWS_PER_PAGE;
-	void *page = pager_get_page(table->pager, page_num);
+	void *page = pager_get_page(cursor->table->pager, page_num);
 
 	uint32_t row_off = row_num % ROWS_PER_PAGE;
 	uint32_t byte_off = row_off * ROW_SIZE;
 	return page + byte_off;
+}
+
+void cursor_advance(cursor_t *cursor)
+{
+	cursor->row_num++;
+	if (cursor->row_num >= cursor->table->num_rows) {
+		cursor->eot = true;
+	}
 }
 
 void row_print(row_t *row)

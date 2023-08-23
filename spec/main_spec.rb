@@ -18,10 +18,6 @@
 #
 
  describe 'database' do
-	before do
-		`rm -rf test.db`
-	end
-
 	def run_script(commands)
 		raw_output = nil
 		IO.popen("./build/src/fqlconsole test.db", "r+") do |pipe|
@@ -124,5 +120,9 @@
 			"OK.",
 			"fql> ",
 		])
+	end
+
+	after do
+		`rm -rf test.db`
 	end
 end
