@@ -27,4 +27,6 @@
 prep_result_t statement_prepare(inbuf_t *input, statement_t *statement);
 exec_result_t statement_exec(statement_t *statement, table_t *table);
 
+prep_result_t insert_prepare(inbuf_t *input, statement_t *statement);
+
 #endif /* __STATEMENT_H_ */

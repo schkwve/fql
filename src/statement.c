@@ -29,14 +29,7 @@ prep_result_t statement_prepare(inbuf_t *input, statement_t *statement)
 {
 	// @todo: port over hashtable from psh
 	if (strncmp(input->buffer, "insert", 6) == 0) {
-		statement->type = STATEMENT_INSERT;
-		int args = sscanf(
-			input->buffer, "insert %d %s %s", &(statement->insert_row.id),
-			statement->insert_row.username, statement->insert_row.email);
-		if (args < 3) {
-			return PREPARE_SYNTAX_ERR;
-		}
-		return PREPARE_SUCCESS;
+		return insert_prepare(input, statement);
 	} else if (strcmp(input->buffer, "select") == 0) {
 		statement->type = STATEMENT_SELECT;
 		return PREPARE_SUCCESS;
@@ -53,4 +46,38 @@ exec_result_t statement_exec(statement_t *statement, table_t *table)
 	case STATEMENT_SELECT:
 		return cmd_select(statement, table);
 	}
+}
+
+prep_result_t insert_prepare(inbuf_t *input, statement_t *statement)
+{
+	statement->type = STATEMENT_INSERT;
+
+	char *keyword = strtok(input->buffer, " ");
+	(void)keyword;
+	char *id_string = strtok(NULL, " ");
+	char *username = strtok(NULL, " ");
+	char *email = strtok(NULL, " ");
+
+	if (id_string == NULL || username == NULL || email == NULL) {
+		return PREPARE_SYNTAX_ERR;
+	}
+
+	int id = atoi(id_string);
+	if (id < 0) {
+		return PREPARE_NEG_ID;
+	}
+
+	if (strlen(username) > COL_USERNAME_SIZE) {
+		return PREPARE_STR_TOO_LONG;
+	}
+
+	if (strlen(email) > COL_EMAIL_SIZE) {
+		return PREPARE_STR_TOO_LONG;
+	}
+
+	statement->insert_row.id = id;
+	strcpy(statement->insert_row.username, username);
+	strcpy(statement->insert_row.email, email);
+
+	return PREPARE_SUCCESS;
 }

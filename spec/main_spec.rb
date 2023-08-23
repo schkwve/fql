@@ -48,10 +48,25 @@
 		end
 		script << ".exit"
 
-		expected = "fql> Error: Table full."
+		result = run_script(script)
+		expect(result[-2]).to eq("fql> Error: Table full.")
+	end
+
+	it 'prints error message if strings are too long' do
+		long_uname = "a" * 33
+		long_email = "a" * 256
+		script = [
+			"insert 1 #{long_uname} #{long_email}",
+			"select",
+			".exit",
+		]
 
 		result = run_script(script)
-		expect(result[-2]).to eq(expected)
+		expect(result).to match_array([
+			"fql> ",
+			"fql> OK.",
+			"fql> String is too long.",
+		])
 	end
 
 	it 'allows inserting strings that are the maximum length' do
@@ -69,6 +84,20 @@
 			"fql> ",
 			"fql> (1, #{long_uname}, #{long_email})",
 			"fql> OK.",
+		])
+	end
+
+	it 'prints an error message if ID is negative' do
+		script = [
+			"insert -1 test foo@bar.com",
+			"select",
+			".exit",
+		]
+		result = run_script(script)
+		expect(result).to match_array([
+			"fql> ID must be positive.",
+			"fql> OK.",
+			"fql> ",
 		])
 	end
 end

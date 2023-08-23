@@ -50,6 +50,12 @@ int main()
 		switch (statement_prepare(input_buf, &statement)) {
 		case PREPARE_SUCCESS:
 			break;
+		case PREPARE_STR_TOO_LONG:
+			printf("String is too long.\n");
+			continue;
+		case PREPARE_NEG_ID:
+			printf("ID must be positive.\n");
+			continue;
 		case PREPARE_SYNTAX_ERR:
 			printf("Syntax error.\n");
 			continue;
